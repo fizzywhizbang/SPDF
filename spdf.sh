@@ -7,9 +7,11 @@ function mkimgs() {
     echo "Creating Images"
     echo "$f2c"
     pdftoppm -png "$f2c" images/page
+    echo "Image Creation Complete"
 }
 
 function mkpdfs {
+    echo "Creating PDFs from images"
     cd images
     for f in *
     do
@@ -22,6 +24,7 @@ function mkpdfs {
 
     done
     cd "$cwd"
+    echo "PDF files from images complete"
 }
 
 function mergepdfs() {
@@ -33,13 +36,17 @@ function mergepdfs() {
         filename="$output"
     fi
 
-    pdfunite $(ls -v *.pdf) "$filename.pdf"
+    pdfunite $(ls -v *.pdf) "../$filename.pdf"
 }
 
-
+echo "Creating images directory"
 mkdir images
 mkimgs
-
-
+echo "Creating PDFs directory"
 mkdir pdf
+mkpdfs
+echo "Creating Single PDF from individual files"
+mergepdfs
+
+
 
