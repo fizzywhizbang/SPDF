@@ -1,13 +1,24 @@
 #!/bin/bash
 cwd=$(pwd)
-f2c="$1" #file to convert
-output="$2" #new merged filename
+
+output="$1" #new merged filename
 
 function mkimgs() {
     echo "Creating Images"
     echo "$f2c"
-    pdftoppm -png "$f2c" images/page
+    pdfimages -all "$f" images/kat"$i"
+    # pdftoppm -png "$f" images/kat"$i"
     echo "Image Creation Complete"
+}
+
+function size() {
+    mkdir sized
+    #match all sizes
+    cd images
+    NF="${FILENAME}x${percent}.${EXT}"
+    echo "${NF}"
+    convert "${f}" -resize "2480x3508"  "../sized/${f}"
+    cd ..
 }
 
 function mkpdfs {
@@ -27,8 +38,19 @@ function mkpdfs {
     echo "PDF files from images complete"
 }
 
-function mergepdfs() {
+function scalepdf() {
+    mkdir pdfscale
     cd pdf
+
+    for f in *.pdf
+    do
+    pdfposter "$f" "../pdfscale/$f"
+    done
+}
+
+#2480x3508
+function mergepdfs() {
+    cd pdfscale
     if [ ${output##*.} == "pdf" ]
     then
         filename=${output##*.}
@@ -41,12 +63,18 @@ function mergepdfs() {
 
 echo "Creating images directory"
 mkdir images
-mkimgs
+i=0
+for f in *.pdf
+do
+mkimgs $f
+echo $i
+((i=i+1))
+done
 echo "Creating PDFs directory"
 mkdir pdf
 mkpdfs
+echo "Scaling pdfs to A4"
+scalepdf
+
 echo "Creating Single PDF from individual files"
 mergepdfs
-
-
-
