@@ -178,6 +178,7 @@ function mergepdfs() {
     #shrink pdf
     if [ $RESIZE == TRUE ]
     then
+        cd "$cwd"
         echo "Resizing PDF with Ghostscript"
         ghostscript -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${filename}_resize.pdf" "$filename.pdf"
     fi
