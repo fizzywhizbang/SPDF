@@ -159,6 +159,7 @@ function scalepdf() {
 
     for f in *.pdf
     do
+        printf "${Yellow} Scaling ${f} ${NC}"
     pdfposter "$f" "../pdfscale/$f"
     done
 }
